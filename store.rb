@@ -4,6 +4,9 @@
 # Script Name: store.rb
 # Version: 1.0
 # Author: Ryan Southern
+# Author: Vishav Kalia
+# Author: Lindsay Anderson
+# Author: Annabel Biwott
 # Date: October 2015
 # 
 # Description: This Ruby program covers some of the basic 
