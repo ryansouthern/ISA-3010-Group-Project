@@ -74,7 +74,30 @@ if menuSelection == "1"
 	
 	Console_Screen.cls #Clear the display area
 
-	#put purchase item code here
+	#get items from flat file
+	items = Array.new
+	File.open('products.txt') do |f|
+		f.each_line do |line|
+			items << line.chomp.split(/\s*\|\s*/)
+		end
+	end
+
+	puts "Please enter your name."
+	customer = STDIN.gets
+
+	purchaseItem = 0
+	until purchaseItem < 1 || purchaseItem > items.length || purchaseItem != null
+		puts "What would you like to purchase?\n" +
+		"(Enter item number and press enter)"
+
+		items.each_with_index { |x,index| puts "Item #{index + 1} is #{x[0]} for #{x[1]}" }
+		purchaseItem = STDIN.gets.to_i
+
+		if purchaseItem < 1 || purchaseItem > items.length
+			puts "Please enter a valid item number."
+			puts purchaseItem
+		end
+	end
 
 elsif menuSelection == "2"
 
