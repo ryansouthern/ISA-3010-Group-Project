@@ -1,2 +1,5 @@
-Item1|1
-Item2|2
+Keyboard|20
+Mouse|5
+Monitor|100
+Desktop|500
+Laptop|800
