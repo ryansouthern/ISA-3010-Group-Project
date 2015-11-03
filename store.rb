@@ -63,28 +63,52 @@ class StoreClass
 			puts "What would you like to purchase?\n" +
 			"(Enter item number and press enter)"
 			
-			items.each_with_index { |x,index| puts "Item #{index + 1} is #{x[0]} for #{x[1]}" }
+			items.each_with_index { |x,index| puts "Item #{index + 1} is #{x[0]} for $#{x[1]}" }
 			purchaseItem = STDIN.gets.to_i
 
 			if purchaseItem - 1 >= 0 && purchaseItem - 1 < items.length
 				time1 = Time.new
-				now = time1.strftime("%Y-%m-%d %H:%M:%S")
-				Store.logPurchase(customer,purchaseItem,now)
+				date = time1.strftime("%Y-%m-%d")
+				time = time1.strftime("%H:%M:%S")
+				Store.logPurchase(customer,purchaseItem,date,time)
+				Console_Screen.cls #Clear the display area
+				puts "Thanks for your purchase! (Press enter)"
+				Console_Screen.pause #wait for input
+				Store.storeClose
 			else
+				Console_Screen.cls #Clear the display area
 				puts "Please select a valid option."
 				purchase(0)
 			end
 		end
 	end
 
-	def logPurchase(customer,purchaseItem,time)
+	def logPurchase(customer,purchaseItem,date,time)
 		open('purchase-history.txt', 'a') { |f|
-  			f.puts "#{customer}|#{purchaseItem - 1}|#{time}"
+  			f.puts "#{customer}|#{purchaseItem - 1}|#{date}|#{time}"
 		}
 	end
 
 	def getHistory
-		#get the history
+		Console_Screen.cls #Clear the display area
+	
+		#get items from flat file
+		items = Array.new
+		File.open('products.txt') do |f|
+			f.each_line do |line|
+				items << line.chomp.split(/\s*\|\s*/)
+			end
+		end
+
+		#get history from flat file
+		history = Array.new
+		File.open('purchase-history.txt') do |f|
+			f.each_line do |line|
+				history << line.chomp.split(/\s*\|\s*/)
+			end
+		end
+
+		history.each { |x| puts "#{x[0]} purchased a #{items[1][0]} for $#{items[1][1]} on #{x[2]} at #{x[3]}" }
 	end
 
 	def storeClose
