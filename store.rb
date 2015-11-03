@@ -44,6 +44,55 @@ class StoreClass
 		print menuTxt
 	end
 
+	def purchase(i)
+		if i != 1
+			Console_Screen.cls #Clear the display area
+	
+			#get items from flat file
+			items = Array.new
+			File.open('products.txt') do |f|
+				f.each_line do |line|
+					items << line.chomp.split(/\s*\|\s*/)
+				end
+			end
+	
+			puts "Please enter your name."
+			customer = STDIN.gets.chomp
+			
+			purchaseItem = 0
+			puts "What would you like to purchase?\n" +
+			"(Enter item number and press enter)"
+			
+			items.each_with_index { |x,index| puts "Item #{index + 1} is #{x[0]} for #{x[1]}" }
+			purchaseItem = STDIN.gets.to_i
+
+			if purchaseItem - 1 >= 0 && purchaseItem - 1 < items.length
+				time1 = Time.new
+				now = time1.strftime("%Y-%m-%d %H:%M:%S")
+				Store.logPurchase(customer,purchaseItem,now)
+			else
+				puts "Please select a valid option."
+				purchase(0)
+			end
+		end
+	end
+
+	def logPurchase(customer,purchaseItem,time)
+		open('purchase-history.txt', 'a') { |f|
+  			f.puts "#{customer}|#{purchaseItem - 1}|#{time}"
+		}
+	end
+
+	def getHistory
+		#get the history
+	end
+
+	def storeClose
+		Console_Screen.cls #Clear the display area
+
+		puts "Please come back soon! \n"
+	end
+
 end
 
 
@@ -69,23 +118,11 @@ until menuSelection == "1" || menuSelection == "2" || menuSelection == "3"
 	menuSelection.chop!
 end
 
-# menu logic, then preform the action
+# menu logic
 if menuSelection == "1"
-	
-	Console_Screen.cls #Clear the display area
-
-	#put purchase item code here
-
+	Store.purchase(0)
 elsif menuSelection == "2"
-
-	Console_Screen.cls #Clear the display area
-
-	#put lookup history code here
-
+	Store.getHistory
 else
-
-	Console_Screen.cls #Clear the display area
-
-	puts "Please come back soon! \n"
-
+	Store.storeClose
 end
