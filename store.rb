@@ -50,7 +50,8 @@ class StoreClass
 	
 			#get items from flat file
 			items = Array.new
-			File.open('products.txt') do |f|
+			prodfile = File.join(File.dirname(__FILE__), 'products.txt')
+			File.open(prodfile) do |f|
 				f.each_line do |line|
 					items << line.chomp.split(/\s*\|\s*/)
 				end
@@ -84,7 +85,8 @@ class StoreClass
 	end
 
 	def logPurchase(customer,purchaseItem,date,time)
-		open('purchase-history.txt', 'a') { |f|
+		hisfile = File.join(File.dirname(__FILE__), 'purchase-history.txt')
+		open(hisfile, 'a') { |f|
   			f.puts "#{customer}|#{purchaseItem - 1}|#{date}|#{time}"
 		}
 	end
