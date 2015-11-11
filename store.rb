@@ -67,10 +67,12 @@ class StoreClass
 		purchaseItem = STDIN.gets.to_i
 
 		if purchaseItem - 1 >= 0 && purchaseItem - 1 < items.length
+			purchasedItem = "#{items[purchaseItem - 1][0]}"
+			price = "#{items[purchaseItem - 1][1]}"
 			time1 = Time.new
 			date = time1.strftime("%Y-%m-%d")
 			time = time1.strftime("%H:%M:%S")
-			Store.logPurchase(customer,purchaseItem,date,time)
+			Store.logPurchase(customer,purchasedItem,price,date,time)
 			Console_Screen.cls #Clear the display area
 			puts "Thanks for your purchase! (Press enter)"
 			Console_Screen.pause #wait for input
@@ -82,24 +84,16 @@ class StoreClass
 		end
 	end
 
-	def logPurchase(customer,purchaseItem,date,time)
+	def logPurchase(customer,purchasedItem,price,date,time)
 		hisfile = File.join(File.dirname(__FILE__), 'purchase-history.txt')
 		open(hisfile, 'a') { |f|
-  			f.puts "#{customer}|#{purchaseItem - 1}|#{date}|#{time}"
+  			f.puts "#{customer}|#{purchasedItem}|#{price}|#{date}|#{time}"
 		}
 	end
 
 	def getHistory
 		Console_Screen.cls #Clear the display area
-	
-		#get items from flat file
-		items = Array.new
-		File.open('products.txt') do |f|
-			f.each_line do |line|
-				items << line.chomp.split(/\s*\|\s*/)
-			end
-		end
-
+		
 		#get history from flat file
 		history = Array.new
 		File.open('purchase-history.txt') do |f|
@@ -108,7 +102,7 @@ class StoreClass
 			end
 		end
 
-		history.each { |x| puts "#{x[0]} purchased a #{items[1][0]} for $#{items[1][1]} on #{x[2]} at #{x[3]}" }
+		history.each { |x| puts "#{x[0]} purchased a #{x[1]} for $#{x[2]} on #{x[3]} at #{x[4]}" }
 	end
 
 	def storeClose
