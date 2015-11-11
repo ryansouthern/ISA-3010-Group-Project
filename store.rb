@@ -44,43 +44,41 @@ class StoreClass
 		print menuTxt
 	end
 
-	def purchase(i)
-		if i != 1
-			Console_Screen.cls #Clear the display area
+	def purchase
+		Console_Screen.cls #Clear the display area
 	
-			#get items from flat file
-			items = Array.new
-			prodfile = File.join(File.dirname(__FILE__), 'products.txt')
-			File.open(prodfile) do |f|
-				f.each_line do |line|
-					items << line.chomp.split(/\s*\|\s*/)
-				end
+		#get items from flat file
+		items = Array.new
+		prodfile = File.join(File.dirname(__FILE__), 'products.txt')
+		File.open(prodfile) do |f|
+			f.each_line do |line|
+				items << line.chomp.split(/\s*\|\s*/)
 			end
+		end
 	
-			puts "Please enter your name."
-			customer = STDIN.gets.chomp
-			
-			purchaseItem = 0
-			puts "What would you like to purchase?\n" +
-			"(Enter item number and press enter)"
-			
-			items.each_with_index { |x,index| puts "Item #{index + 1} is #{x[0]} for $#{x[1]}" }
-			purchaseItem = STDIN.gets.to_i
+		puts "Please enter your name."
+		customer = STDIN.gets.chomp
+		
+		purchaseItem = 0
+		puts "What would you like to purchase?\n" +
+		"(Enter item number and press enter)"
+		
+		items.each_with_index { |x,index| puts "Item #{index + 1} is #{x[0]} for $#{x[1]}" }
+		purchaseItem = STDIN.gets.to_i
 
-			if purchaseItem - 1 >= 0 && purchaseItem - 1 < items.length
-				time1 = Time.new
-				date = time1.strftime("%Y-%m-%d")
-				time = time1.strftime("%H:%M:%S")
-				Store.logPurchase(customer,purchaseItem,date,time)
-				Console_Screen.cls #Clear the display area
-				puts "Thanks for your purchase! (Press enter)"
-				Console_Screen.pause #wait for input
-				Store.storeClose
-			else
-				Console_Screen.cls #Clear the display area
-				puts "Please select a valid option."
-				purchase(0)
-			end
+		if purchaseItem - 1 >= 0 && purchaseItem - 1 < items.length
+			time1 = Time.new
+			date = time1.strftime("%Y-%m-%d")
+			time = time1.strftime("%H:%M:%S")
+			Store.logPurchase(customer,purchaseItem,date,time)
+			Console_Screen.cls #Clear the display area
+			puts "Thanks for your purchase! (Press enter)"
+			Console_Screen.pause #wait for input
+			Store.storeClose
+		else
+			Console_Screen.cls #Clear the display area
+			puts "Please select a valid option."
+			purchase(0)
 		end
 	end
 
@@ -146,7 +144,7 @@ end
 
 # menu logic
 if menuSelection == "1"
-	Store.purchase(0)
+	Store.purchase
 elsif menuSelection == "2"
 	Store.getHistory
 else
